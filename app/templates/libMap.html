@@ -7,15 +7,22 @@
       src="{{url}}">
     </script>
     <script type="text/javascript">
-        var map = new google.maps.Map(document.getElementById('map-canvas'),
+        function initialize() {
+          var mapOptions = {
+            center: { lat:40.752198399999997, lng:-73.981831200000002},
+            zoom: 12
+           };
+          var map = new google.maps.Map(document.getElementById('map-canvas'),
             mapOptions);
+          
         {% for library in libraries %}
         var marker= new google.maps.Marker({
-        	position: {{library[1]}},
+        	position: {lat: {{library[1]}}, lng: {{library[2]}} },
         	map: map,
         	title: "{{library[0]}}"
         });
         {% endfor %}
+      }
       google.maps.event.addDomListener(window, 'load', initialize);
     </script>
   </head>

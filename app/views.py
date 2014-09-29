@@ -38,7 +38,7 @@ def places_available(link):
 		if libName.endswith(")"):
 			libName=libName[:-5]
 		if libName in the_libraries:
-			places_av.append([libName, the_libraries[libName].latLng])	
+			places_av.append([libName, the_libraries[libName].latLng[0], the_libraries[libName].latLng[1]])	
 	#for i in range(len(places)):
 	#	places_av.append(places[i].text)
 	return places_av
@@ -49,7 +49,10 @@ def places_available(link):
 #these include the data itself that could be part of the view. The html page controls how it looks and what gets shown
 
 def index():
-	return render_template("libMap.html", libraries=places_available(find_link_to_copies("mockingjay")))
+	api_key=open('api_key').read()
+	url="https://maps.googleapis.com/maps/api/js?key=%s"%api_key
+
+	return render_template("libMap.html", libraries=places_available(find_link_to_copies("mockingjay")), url=url)
 	"""if request.method=="GET":
 					return render_template ("start.html")
 				else:
