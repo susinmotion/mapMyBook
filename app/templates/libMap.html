@@ -14,15 +14,34 @@
            };
           var map = new google.maps.Map(document.getElementById('map-canvas'),
             mapOptions);
-          
-        {% for library in libraries %}
-        var marker= new google.maps.Marker({
-        	position: {lat: {{library[1]}}, lng: {{library[2]}} },
-        	map: map,
-        	title: "{{library[0]}}"
-        });
+
+          var myinfoWindow = new google.maps.InfoWindow({
+            });
+          {% for library in libraries %}
+          var contentString = '<div id="content">'+
+          '<div id="siteNotice">'+
+          '</div>'+
+          '<h1 id="firstHeading" class="firstHeading">{{library[0]}}</h1>'+
+          '<p>{{library[3]}}</p>'+
+          '</div>'+
+          '</div>';
+         
+          var marker= new google.maps.Marker({
+          	position: {lat: {{library[1]}}, lng: {{library[2]}} },
+          	map: map,
+          	title: "{{library[0]}}",
+            infoWindow : myinfoWindow
+          });
+
+          listen(marker, myinfoWindow, map,contentString)
         {% endfor %}
       }
+          function listen(marker, infoWindow,map,contentString){
+          google.maps.event.addListener(marker,'click',function(){
+            infoWindow.setContent(contentString)
+            infoWindow.open(map,marker);
+          });
+        }
       google.maps.event.addDomListener(window, 'load', initialize);
     </script>
   </head>

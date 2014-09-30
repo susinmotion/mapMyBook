@@ -38,7 +38,7 @@ def places_available(link):
 		if libName.endswith(")"):
 			libName=libName[:-5]
 		if libName in the_libraries:
-			places_av.append([libName, the_libraries[libName].latLng[0], the_libraries[libName].latLng[1]])	
+			places_av.append([libName, the_libraries[libName].latLng[0], the_libraries[libName].latLng[1], the_libraries[libName].address[:-1]])	
 	#for i in range(len(places)):
 	#	places_av.append(places[i].text)
 	return places_av
@@ -49,22 +49,20 @@ def places_available(link):
 #these include the data itself that could be part of the view. The html page controls how it looks and what gets shown
 
 def index():
-	api_key=open('api_key').read()
-	url="https://maps.googleapis.com/maps/api/js?key=%s"%api_key
 
-	return render_template("libMap.html", libraries=places_available(find_link_to_copies("mockingjay")), url=url)
-	"""if request.method=="GET":
-					return render_template ("start.html")
-				else:
-					keyword=request.form.get('keyword')
-					#destination=request.form.get('destination')
-					return ((map(keyword))"""
+	if request.method=="GET":
+		return render_template ("start.html")
+	else:
+		keyword=request.form.get('keyword')
+		return (map(keyword))
+
 
 @app.route('/map')
 
-def map():
-
-	return render_template("base.html", libraries=places_available(find_link_to_copies("mockingjay")))#url=url, lat1=lat1, lng1=lng1, lat2=lat2,lng2=lng2)
-
+def map(keyword):
+	api_key=open('api_key').read()
+	url="https://maps.googleapis.com/maps/api/js?key=%s"%api_key
+	
+	return render_template("libMap.html", libraries=places_available(find_link_to_copies(keyword)), url=url)
 #these include the data itself that could be part of the view. The html page controls how it looks and what gets shown
 #def THE NAME OF THE THING AFTER THE SLASH--different page views
