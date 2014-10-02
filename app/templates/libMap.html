@@ -1,7 +1,7 @@
 <html>
-  <head>
+  <head> 
     <style type="text/css">
-      html, body, #map-canvas { height: 100%; margin: 0; padding: 0;}
+      html, body, #map-canvas { height: 100%; margin: 0; padding: 0;} #xyz {position: absolute; top: 60px; left:70; background: whitesmoke; border: 5px black double; font-size: 15px; padding: 10px;}
     </style>
     <script type="text/javascript"
       src="{{url}}">
@@ -14,10 +14,16 @@
            };
           var map = new google.maps.Map(document.getElementById('map-canvas'),
             mapOptions);
+          var msgContainer = document.createElement('div');
+          msgContainer.id = 'xyz';             // No setAttribute required
 
+          msgContainer.appendChild(document.createTextNode("showing results for  {{fulltitle}} "));
+          var markers = [];
+          document.body.appendChild(msgContainer);
           var myinfoWindow = new google.maps.InfoWindow({
             });
           {% for library in libraries %}
+
           var contentString = '<div id="content">'+
           '<div id="siteNotice">'+
           '</div>'+
@@ -32,17 +38,20 @@
           	title: "{{library[0]}}",
             infoWindow : myinfoWindow
           });
-
+          markers.push(marker);
           listen(marker, myinfoWindow, map,contentString)
         {% endfor %}
-      }
-          function listen(marker, infoWindow,map,contentString){
+              msgContainer.addEventListener('click', function(event) {console.log(markers);});
+        }
+          
+        function listen(marker, infoWindow,map,contentString){
           google.maps.event.addListener(marker,'click',function(){
             infoWindow.setContent(contentString)
             infoWindow.open(map,marker);
           });
         }
       google.maps.event.addDomListener(window, 'load', initialize);
+
     </script>
   </head>
   <body>
